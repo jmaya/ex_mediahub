@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+  web:
+    image: "mediahub:latest"
+    ports:
+      - "4000:4000" # In our .env file above, we chose port 4000
+    env_file:
+      - config/docker.env
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data
