@@ -43,6 +43,7 @@ config :ex_mediahub, MediaHubWeb.Endpoint,
 #
 # The `http:` config above can be replaced with:
 #
+
 #     https: [
 #       port: 4001,
 #       cipher_suite: :strong,

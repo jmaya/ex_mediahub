@@ -17,6 +17,10 @@ defmodule MediaHubWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+      resources "/courses", CourseController
+
+
   end
 
   # Other scopes may use custom stacks.
