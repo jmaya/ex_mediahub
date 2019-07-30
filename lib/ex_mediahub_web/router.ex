@@ -18,9 +18,7 @@ defmodule MediaHubWeb.Router do
 
     get "/", PageController, :index
 
-      resources "/courses", CourseController
-
-
+    resources "/courses", CourseController
   end
 
   # Other scopes may use custom stacks.

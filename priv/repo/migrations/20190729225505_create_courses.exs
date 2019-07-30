@@ -8,9 +8,8 @@ defmodule MediaHub.Repo.Migrations.CreateCourses do
       add :file_attachments_count, :integer, null: true, default: 0
 
       timestamps()
-
     end
-  create index(:courses, [:name], unique: true)
 
+    create index(:courses, [:name], unique: true)
   end
 end

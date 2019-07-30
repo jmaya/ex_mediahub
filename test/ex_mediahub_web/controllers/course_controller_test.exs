@@ -4,7 +4,11 @@ defmodule MediaHubWeb.CourseControllerTest do
   alias MediaHub.Courses
 
   @create_attrs %{company: "some company", file_attachments_count: 42, name: "some name"}
-  @update_attrs %{company: "some updated company", file_attachments_count: 43, name: "some updated name"}
+  @update_attrs %{
+    company: "some updated company",
+    file_attachments_count: 43,
+    name: "some updated name"
+  }
   @invalid_attrs %{company: nil, file_attachments_count: nil, name: nil}
 
   def fixture(:course) do
@@ -75,6 +79,7 @@ defmodule MediaHubWeb.CourseControllerTest do
     test "deletes chosen course", %{conn: conn, course: course} do
       conn = delete(conn, Routes.course_path(conn, :delete, course))
       assert redirected_to(conn) == Routes.course_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.course_path(conn, :show, course))
       end

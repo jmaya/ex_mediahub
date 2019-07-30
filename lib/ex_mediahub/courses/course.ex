@@ -16,6 +16,5 @@ defmodule MediaHub.Courses.Course do
     |> cast(attrs, [:name, :company, :file_attachments_count])
     |> validate_required([:name])
     |> unique_constraint(:name)
-
   end
 end
