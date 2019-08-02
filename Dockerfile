@@ -2,7 +2,7 @@
 # This should match the version of Alpine that the `elixir:1.7.2-alpine` image uses
 ARG ALPINE_VERSION=3.9
 
-FROM elixir:1.8.1-alpine AS builder
+FROM elixir:1.9.1-alpine AS builder
 
 # The following are build arguments used to change variable parts of the image.
 # The name of your application/release (required)
@@ -55,11 +55,12 @@ fi
 
 RUN \
   mkdir -p /opt/built && \
-  mix release --verbose && \
-  cp _build/${MIX_ENV}/rel/${APP_NAME}/releases/${APP_VSN}/${APP_NAME}.tar.gz /opt/built && \
-  cd /opt/built && \
-  tar -xzf ${APP_NAME}.tar.gz && \
-  rm ${APP_NAME}.tar.gz
+  mix release && \
+  cp -pr _build/${MIX_ENV}/rel/${APP_NAME}/ /opt/built
+  # cp _build/${MIX_ENV}/rel/${APP_NAME}/releases/${APP_VSN}/${APP_NAME}.tar.gz /opt/built && \
+  # cd /opt/built && \
+  # tar -xzf ${APP_NAME}.tar.gz && \
+  # rm ${APP_NAME}.tar.gz
 
 # From this line onwards, we're in a new image, which will be the image used in production
 FROM alpine:${ALPINE_VERSION}
@@ -77,6 +78,6 @@ ENV REPLACE_OS_VARS=true \
 
 WORKDIR /opt/app
 
-COPY --from=builder /opt/built .
+COPY --from=builder /opt/built/* .
 
 CMD trap 'exit' INT; /opt/app/bin/${APP_NAME} foreground
