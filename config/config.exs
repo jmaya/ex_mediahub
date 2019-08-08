@@ -16,7 +16,8 @@ config :ex_mediahub, MediaHubWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "Rmr/eOj7RlHqACooH63wRwd7rESdE9atju+yr4G5bn3ThKsuEdvC/lUU/9TO/esP",
   render_errors: [view: MediaHubWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: MediaHub.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: MediaHub.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [signing_salt: "tpZ0ZkN4rhnYYM0fdEFTXVNxAqgC68K1"]
 
 # Configures Elixir's Logger
 config :logger, :console,
