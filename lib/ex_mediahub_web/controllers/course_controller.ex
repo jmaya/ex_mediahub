@@ -3,10 +3,12 @@ defmodule MediaHubWeb.CourseController do
 
   alias MediaHub.Courses
   alias MediaHub.Courses.Course
+  alias Phoenix.LiveView
+  alias MediaHubWeb.CourseLive.Index
 
   def index(conn, _params) do
     courses = Courses.list_courses()
-    render(conn, "index.html", courses: courses)
+    LiveView.Controller.live_render(conn, Index, session: %{courses: courses})
   end
 
   def new(conn, _params) do

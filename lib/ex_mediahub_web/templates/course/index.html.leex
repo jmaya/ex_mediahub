@@ -22,9 +22,6 @@
             <td><%= course.company %></td>
             <td><%= course.file_attachments_count %></td>
             <td>
-              <%= link "Show", to: Routes.course_path(@conn, :show, course) %>
-              <%= link "Edit", to: Routes.course_path(@conn, :edit, course) %>
-              <%= link "Delete", to: Routes.course_path(@conn, :delete, course), method: :delete, data: [confirm: "Are you sure?"] %>
             </td>
           </tr>
         <% end %>
@@ -34,7 +31,8 @@
 </div>
 <div class="row">
   <div class="col-12">
-    <span><%= link "New Course", to: Routes.course_path(@conn, :new) %></span>
+      <span><%= live_link "New Course", to: Routes.live_path(@socket, MediaHubWeb.CourseLive.New) %></span>
+
   </div>
 </div>
 <div class="container">

@@ -1,5 +1,6 @@
 defmodule MediaHubWeb.Router do
   use MediaHubWeb, :router
+  import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -20,6 +21,9 @@ defmodule MediaHubWeb.Router do
     get "/", PageController, :index
 
     resources "/courses", CourseController
+    live "/live-courses", CourseLive.Index
+    live "/live-courses/new", CourseLive.New
+    live "/top", TopLive
   end
 
   # Other scopes may use custom stacks.
