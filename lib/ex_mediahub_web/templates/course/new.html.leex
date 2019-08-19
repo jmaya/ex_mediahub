@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, Routes.course_path(@socket, :create)) %>
 
-<span><%= link "Back", to: Routes.course_path(@socket, :index) %></span>
+<span><%= live_link "Back", to: Routes.live_path(@socket, MediaHubWeb.CourseLive.Index) %></span>

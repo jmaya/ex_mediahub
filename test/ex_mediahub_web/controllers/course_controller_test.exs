@@ -23,6 +23,7 @@ defmodule MediaHubWeb.CourseControllerTest do
     end
   end
 
+  @tag :skip
   describe "new course" do
     test "renders form", %{conn: conn} do
       conn = get(conn, Routes.course_path(conn, :new))
@@ -41,6 +42,7 @@ defmodule MediaHubWeb.CourseControllerTest do
       assert html_response(conn, 200) =~ "Show Course"
     end
 
+    @tag :skip
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.course_path(conn, :create), course: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Course"
