@@ -44,7 +44,8 @@ defmodule MediaHub.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:distillery, "~> 2.0"},
-      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"}
+      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
+      {:mix_test_watch, "~> 0.9.0", only: [:dev, :test]}
     ]
   end
 
