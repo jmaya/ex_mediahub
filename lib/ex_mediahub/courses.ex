@@ -19,6 +19,11 @@ defmodule MediaHub.Courses do
     {:ok, result}
   end
 
+  defp broadcast_change({:error, result}, event) do
+    Phoenix.PubSub.broadcast(MediaHub.PubSub, @topic, {__MODULE__, event, result})
+    {:error, result}
+  end
+
   @doc """
   Returns the list of courses.
 

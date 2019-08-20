@@ -5,15 +5,22 @@
     </div>
   <% end %>
 
-  <%= label f, :name %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
-
-  <%= label f, :company %>
-  <%= text_input f, :company %>
-  <%= error_tag f, :company %>
-
-  <div>
-    <%= submit "Save", phx_disable_with: "Saving..." %>
+  <div class="form-group">
+    <label for="name">Name</label> 
+    <input id="course_name" name="course[name]" type="text" required="required" class="form-control">
   </div>
-  </form>
+  <div class="form-group">
+    <label for="company">Company</label> 
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <i class="fa fa-building-o"></i>
+        </div>
+      </div> 
+      <input id="course_company" name="course[company]" type="text" class="form-control">
+    </div>
+  </div> 
+  <div class="form-group">
+    <%= submit "Save", phx_disable_with: "Saving...", class: "btn btn-primary"%>
+  </div>
+</form>
