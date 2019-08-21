@@ -88,6 +88,7 @@ defmodule MediaHub.Courses do
     course
     |> Course.changeset(attrs)
     |> Repo.update()
+    |> broadcast_change([:course, :updated])
   end
 
   @doc """

@@ -20,7 +20,7 @@ defmodule MediaHubWeb.CourseLive.Index do
     end
   end
 
-  def handle_info({Courses, [:course, :created], course, socket}) do
+  def handle_info({Courses, [:course, :created], course}, socket) do
     {:noreply,
      socket
      |> assign(courses: socket.assigns.courses ++ [course])}

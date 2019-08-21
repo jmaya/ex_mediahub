@@ -15,6 +15,18 @@ defmodule MediaHubWeb.ErrorHelpers do
   end
 
   @doc """
+  Appends Bootstrap error class to input if there's an error
+  """
+
+  def add_error_class(form, field, class) do
+    if Keyword.has_key?(form.errors, field) do
+      class <> " is-invalid"
+    else
+      class
+    end
+  end
+
+  @doc """
   Translates an error message using gettext.
   """
   def translate_error({msg, opts}) do
