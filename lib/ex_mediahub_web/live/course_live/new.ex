@@ -28,7 +28,7 @@ defmodule MediaHubWeb.CourseLive.New do
       {:ok, _course} ->
         {:stop,
          socket
-         |> put_flash(:info, "Course created")
+         #  |> put_flash(:info, "Course created")
          |> redirect(to: Routes.live_path(socket, MediaHubWeb.CourseLive.Index))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
