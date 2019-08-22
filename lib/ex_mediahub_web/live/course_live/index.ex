@@ -25,4 +25,12 @@ defmodule MediaHubWeb.CourseLive.Index do
      socket
      |> assign(courses: socket.assigns.courses ++ [course])}
   end
+
+  def handle_info({Courses, [:course, :deleted], course}, socket) do
+    new_courses =
+      socket.assigns.courses
+      |> Enum.reject(fn c -> c.id == course.id end)
+
+    {:noreply, socket |> assign(courses: new_courses)}
+  end
 end
