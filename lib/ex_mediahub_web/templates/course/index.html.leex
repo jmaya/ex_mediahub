@@ -5,6 +5,26 @@
 </div>
 <div class="row">
   <div class="col-12">
+    <form class="card card-sm" phx-change="filter_courses">
+      <div class="card-body row no-gutters align-items-center">
+        <div class="col-auto">
+          <%# <i class="fas fa-search h4 text-body"></i> %>
+        </div>
+        <!--end of col-->
+        <div class="col">
+          <input name="query" value="<%= @query %>" id="query" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search topics or keywords">
+        </div>
+        <!--end of col-->
+        <div class="col-auto">
+          <button class="btn btn-lg btn-success" type="submit">Search</button>
+        </div>
+        <!--end of col-->
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
     <table class="table table-striped table-bordered table-hover">
       <thead>
         <tr>
@@ -30,21 +50,6 @@
 </div>
 <div class="row">
   <div class="col-12">
-      <span><%= live_link "New Course", to: Routes.live_path(@socket, MediaHubWeb.CourseLive.New) %></span>
-
-  </div>
-</div>
-<div class="container">
-  <div class="row">
-    <%= for course <- @courses do %>
-      <div class="col">
-        <div class="card">
-          <div class="card-block">
-            <div class="card-header h2"><%= course.name %></div>
-            <div class="card-text"><%=course.company %></div>
-          </div>
-        </div>
-      </div>
-    <%end %>
+    <span><%= live_link "New Course", to: Routes.live_path(@socket, MediaHubWeb.CourseLive.New) %></span>
   </div>
 </div>

@@ -18,7 +18,8 @@ defmodule MediaHubWeb.Router do
   scope "/", MediaHubWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    # get "/", PageController, :index
+    get "/", CourseController, :index
 
     resources "/courses", CourseController
     live "/live-courses", CourseLive.Index

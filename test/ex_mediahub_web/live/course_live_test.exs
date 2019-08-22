@@ -6,6 +6,7 @@ defmodule MediaHubWeb.CourseLiveTest do
   test "disconnected and connected mount", %{conn: conn} do
     conn = get(conn, "/live-courses")
     assert html_response(conn, 200) =~ "<h1>Listing Courses</h1>"
+    assert html_response(conn, 200) =~ "Search"
     {:ok, _view, _html} = live(conn)
   end
 

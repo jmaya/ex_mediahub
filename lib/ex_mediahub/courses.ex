@@ -121,4 +121,23 @@ defmodule MediaHub.Courses do
   def change_course(%Course{} = course) do
     Course.changeset(course, %{})
   end
+
+  @doc """
+  Returns a filtered list of Courses
+  """
+  def list_courses_by_name(name) do
+    query = from c in Course, where: ilike(c.name, ^"%#{name}%")
+
+    query
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns last n by create date
+  """
+
+  def list_courses(number_of_courses) do
+    query = from c in Course, order_by: c.inserted_at, limit: ^number_of_courses
+    query |> Repo.all()
+  end
 end

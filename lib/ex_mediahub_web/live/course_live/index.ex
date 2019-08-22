@@ -3,20 +3,19 @@ defmodule MediaHubWeb.CourseLive.Index do
   alias MediaHubWeb.CourseView
   alias MediaHub.Courses
 
+  @max_courses 10
   def render(assigns), do: CourseView.render("index.html", assigns)
 
-  # def mount(%{courses: courses}, socket) do
   def mount(_session, socket) do
-    # if connected?(socket), do: :timer.send_interval(2000, self(), :tick)
     if connected?(socket) do
       Courses.subscribe()
-      courses = Courses.list_courses()
+      courses = Courses.list_courses(@max_courses)
 
       {:ok,
        socket
-       |> assign(courses: courses)}
+       |> assign(courses: courses, query: "")}
     else
-      {:ok, socket |> assign(courses: [])}
+      {:ok, socket |> assign(courses: [], query: "")}
     end
   end
 
@@ -32,5 +31,15 @@ defmodule MediaHubWeb.CourseLive.Index do
       |> Enum.reject(fn c -> c.id == course.id end)
 
     {:noreply, socket |> assign(courses: new_courses)}
+  end
+
+  def handle_event("filter_courses", %{"query" => ""}, socket) do
+    courses = Courses.list_courses(@max_courses)
+    {:noreply, socket |> assign(courses: courses)}
+  end
+
+  def handle_event("filter_courses", %{"query" => query}, socket) do
+    courses = Courses.list_courses_by_name(query)
+    {:noreply, socket |> assign(courses: courses)}
   end
 end
