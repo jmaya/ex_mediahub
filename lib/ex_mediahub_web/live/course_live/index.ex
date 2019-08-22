@@ -39,7 +39,11 @@ defmodule MediaHubWeb.CourseLive.Index do
   end
 
   def handle_event("filter_courses", %{"query" => query}, socket) do
-    courses = Courses.list_courses_by_name(query)
-    {:noreply, socket |> assign(courses: courses)}
+    if(String.length(query) > 2) do
+      courses = Courses.list_courses_by_name(query)
+      {:noreply, socket |> assign(courses: courses)}
+    else
+      {:noreply, socket}
+    end
   end
 end
