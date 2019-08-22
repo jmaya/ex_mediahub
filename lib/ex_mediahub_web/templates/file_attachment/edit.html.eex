@@ -1,0 +1,5 @@
+<h1>Edit File attachment</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.file_attachment_path(@conn, :update, @file_attachment)) %>
+
+<span><%= link "Back", to: Routes.file_attachment_path(@conn, :index) %></span>

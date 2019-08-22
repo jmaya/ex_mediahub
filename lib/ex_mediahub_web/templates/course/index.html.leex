@@ -30,18 +30,15 @@
         <tr>
           <th>Name</th>
           <th>Company</th>
-          <th>File attachments count</th>
-          <th></th>
+          <th>Nof Videos</th>
         </tr>
       </thead>
       <tbody>
         <%= for course <- @courses do %>
           <tr>
-            <td><%= course.name %></td>
+            <td><%= live_link course.name, to: Routes.live_path(@socket, MediaHubWeb.CourseLive.Show, course.id) %></td>
             <td><%= course.company %></td>
-            <td><%= course.file_attachments_count %></td>
-            <td>
-            </td>
+            <td><span class="float-right"><%= course.file_attachments_count %></span></td>
           </tr>
         <% end %>
       </tbody>

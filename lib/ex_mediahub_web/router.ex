@@ -22,8 +22,11 @@ defmodule MediaHubWeb.Router do
     get "/", CourseController, :index
 
     resources "/courses", CourseController
+    resources "/file_attachments", FileAttachmentController
     live "/live-courses", CourseLive.Index
     live "/live-courses/new", CourseLive.New
+    live "/live-courses/:course_id", CourseLive.Show
+    live "/live-courses/edit/:course_id", CourseLive.Edit
     live "/top", TopLive
   end
 

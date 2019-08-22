@@ -1,0 +1,18 @@
+<h1>Show Course</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @course.name %>
+  </li>
+
+  <li>
+    <strong>Company:</strong>
+    <%= @course.company %>
+  </li>
+
+</ul>
+
+<span><%= live_link "Back", to: Routes.course_path(@socket, :index) %></span>
+<span><%= live_link "Edit", to: Routes.live_path(@socket, MediaHubWeb.CourseLive.Edit, @course.id) %></span>

@@ -7,7 +7,7 @@ defmodule MediaHub.Courses.Course do
     field :file_attachments_count, :integer
     field :name, :string
 
-    timestamps()
+    timestamps inserted_at: :created_at
   end
 
   @doc false

@@ -137,7 +137,103 @@ defmodule MediaHub.Courses do
   """
 
   def list_courses(number_of_courses) do
-    query = from c in Course, order_by: c.inserted_at, limit: ^number_of_courses
+    query = from c in Course, order_by: c.created_at, limit: ^number_of_courses
     query |> Repo.all()
+  end
+
+  alias MediaHub.Courses.FileAttachment
+
+  @doc """
+  Returns the list of file_attachments.
+
+  ## Examples
+
+      iex> list_file_attachments()
+      [%FileAttachment{}, ...]
+
+  """
+  def list_file_attachments do
+    Repo.all(FileAttachment)
+  end
+
+  @doc """
+  Gets a single file_attachment.
+
+  Raises `Ecto.NoResultsError` if the File attachment does not exist.
+
+  ## Examples
+
+      iex> get_file_attachment!(123)
+      %FileAttachment{}
+
+      iex> get_file_attachment!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_file_attachment!(id), do: Repo.get!(FileAttachment, id)
+
+  @doc """
+  Creates a file_attachment.
+
+  ## Examples
+
+      iex> create_file_attachment(%{field: value})
+      {:ok, %FileAttachment{}}
+
+      iex> create_file_attachment(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_file_attachment(attrs \\ %{}) do
+    %FileAttachment{}
+    |> FileAttachment.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a file_attachment.
+
+  ## Examples
+
+      iex> update_file_attachment(file_attachment, %{field: new_value})
+      {:ok, %FileAttachment{}}
+
+      iex> update_file_attachment(file_attachment, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_file_attachment(%FileAttachment{} = file_attachment, attrs) do
+    file_attachment
+    |> FileAttachment.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a FileAttachment.
+
+  ## Examples
+
+      iex> delete_file_attachment(file_attachment)
+      {:ok, %FileAttachment{}}
+
+      iex> delete_file_attachment(file_attachment)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_file_attachment(%FileAttachment{} = file_attachment) do
+    Repo.delete(file_attachment)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking file_attachment changes.
+
+  ## Examples
+
+      iex> change_file_attachment(file_attachment)
+      %Ecto.Changeset{source: %FileAttachment{}}
+
+  """
+  def change_file_attachment(%FileAttachment{} = file_attachment) do
+    FileAttachment.changeset(file_attachment, %{})
   end
 end

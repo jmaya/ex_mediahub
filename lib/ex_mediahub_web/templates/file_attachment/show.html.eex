@@ -1,0 +1,33 @@
+<h1>Show File attachment</h1>
+
+<ul>
+
+  <li>
+    <strong>File:</strong>
+    <%= @file_attachment.file %>
+  </li>
+
+  <li>
+    <strong>Sha 1 hash:</strong>
+    <%= @file_attachment.sha_1_hash %>
+  </li>
+
+  <li>
+    <strong>Content type:</strong>
+    <%= @file_attachment.content_type %>
+  </li>
+
+  <li>
+    <strong>File basename:</strong>
+    <%= @file_attachment.file_basename %>
+  </li>
+
+  <li>
+    <strong>Position:</strong>
+    <%= @file_attachment.position %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.file_attachment_path(@conn, :edit, @file_attachment) %></span>
+<span><%= link "Back", to: Routes.file_attachment_path(@conn, :index) %></span>
