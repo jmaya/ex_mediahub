@@ -1,10 +1,10 @@
 defmodule MediaHubWeb.CourseLive.New do
   use Phoenix.LiveView
+  alias MediaHubWeb.Router.Helpers, as: Routes
+
   alias MediaHubWeb.CourseView
   alias MediaHub.Courses
   alias MediaHub.Courses.Course
-
-  alias MediaHubWeb.Router.Helpers, as: Routes
 
   def mount(_session, socket) do
     {:ok,
