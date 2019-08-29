@@ -61,4 +61,9 @@ defmodule MediaHubWeb.CourseController do
     |> put_flash(:info, "Course deleted successfully.")
     |> redirect(to: Routes.course_path(conn, :index))
   end
+
+  def file_attachment_upload(conn, %{"file" => uploaded_file}) do
+    IO.inspect(uploaded_file)
+    text(conn, "Success")
+  end
 end

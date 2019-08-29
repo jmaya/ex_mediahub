@@ -12,13 +12,30 @@ import css from "../css/app.scss"
 //
 
 import "phoenix_html"
+import jQuery from "jquery"
 
 // Import local files
 //
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
 
- import LiveSocket from 'phoenix_live_view'
+import LiveSocket from 'phoenix_live_view'
 
 let liveSocket = new LiveSocket("/live")
 liveSocket.connect()
+
+
+jQuery(document).ready(function ($) {
+
+    function initDropzone() {
+        window.Dropzone = require('dropzone/dist/min/dropzone.min');
+        let options = {
+            acceptedFiles: 'video/*',
+
+        }
+
+        Dropzone.options.uploadWidget = options
+
+    }
+    $(document).on("phx:update", initDropzone)
+})

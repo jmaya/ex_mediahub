@@ -2,4 +2,5 @@
 
 <%= render "form.html", Map.put(assigns, :action, Routes.course_path(@socket, :update, @course)) %>
 
+<form id="upload-widget" action="/api/courses/file-attachment-upload" class="dropzone"></form>
 <span><%= link "Back", to: Routes.course_path(@socket, :index) %></span>
