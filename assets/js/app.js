@@ -31,6 +31,10 @@ jQuery(document).ready(function ($) {
         window.Dropzone = require('dropzone/dist/min/dropzone.min');
         let options = {
             acceptedFiles: 'video/*',
+            params: {
+                course_id: window.location.pathname.split("/").reverse()[0]
+            }
+
 
         }
 

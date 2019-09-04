@@ -9,7 +9,7 @@ defmodule MediaHub.Courses.FileAttachment do
     field :file, :string
     field :file_basename, :string
     field :position, :integer
-    field :sha_1_hash, :integer
+    field :sha_1_hash, :string
     belongs_to(:course, Course)
 
     timestamps inserted_at: :created_at

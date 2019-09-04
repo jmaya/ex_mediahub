@@ -236,4 +236,54 @@ defmodule MediaHub.Courses do
   def change_file_attachment(%FileAttachment{} = file_attachment) do
     FileAttachment.changeset(file_attachment, %{})
   end
+
+  def create_file_attachment_from_uploaded_file(%{
+        course_id: course_id,
+        uploaded_file: uploaded_file
+      }) do
+    case create_file_attachment(%{
+           file_basename: uploaded_file.filename,
+           content_type: uploaded_file.content_type,
+           file: uploaded_file.filename,
+           course: get_course!(course_id),
+           position: 0,
+           sha_1_hash: hash_file(uploaded_file.path)
+         }) do
+      {:ok, file_attachment} ->
+        full_path_name =
+          file_attachment
+          |> create_directory_for_file_attachment(course_id)
+
+        File.rename!(uploaded_file.path, full_path_name)
+        {:ok, file_attachment}
+
+      {:error, changeset} ->
+        changeset
+    end
+  end
+
+  defp create_directory_for_file_attachment(file_attachment, course_id) do
+    file_attachments_path = System.get_env("FILE_ATTACHMENTS_PATH", "./priv/file_attachments")
+    partial_path = Path.join(file_attachments_path, course_id)
+
+    full_path_name =
+      Path.join([partial_path, Integer.to_string(file_attachment.id), file_attachment.file])
+
+    File.mkdir_p!(Path.dirname(full_path_name))
+
+    full_path_name
+  end
+
+  defp hash_file(file_path, algo \\ :sha256) do
+    hash_ref = :crypto.hash_init(algo)
+
+    File.stream!(file_path)
+    |> Enum.reduce(hash_ref, fn chunk, prev_ref ->
+      new_ref = :crypto.hash_update(prev_ref, chunk)
+      new_ref
+    end)
+    |> :crypto.hash_final()
+    |> Base.encode16()
+    |> String.downcase()
+  end
 end

@@ -4,7 +4,7 @@ defmodule MediaHub.Repo.Migrations.CreateFileAttachments do
   def change do
     create table(:file_attachments) do
       add :file, :string, required: true
-      add :sha_1_hash, :integer
+      add :sha_1_hash, :string
       add :content_type, :string
       add :file_basename, :string, required: true
       add :position, :integer, default: 0
