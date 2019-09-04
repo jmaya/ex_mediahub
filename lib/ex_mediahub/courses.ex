@@ -221,7 +221,18 @@ defmodule MediaHub.Courses do
 
   """
   def delete_file_attachment(%FileAttachment{} = file_attachment) do
-    Repo.delete(file_attachment)
+    case Repo.delete(file_attachment) do
+      {:ok, fa} -> fa |> remove_file_attachment_from_disk
+      _ -> {:error, "Something went wrong removing the file"}
+    end
+  end
+
+  defp remove_file_attachment_from_disk(file_attachment) do
+    file_attachment
+    |> build_path_from_file_attachment
+    |> File.rm!()
+
+    {:ok, file_attachment}
   end
 
   @doc """
@@ -252,7 +263,7 @@ defmodule MediaHub.Courses do
       {:ok, file_attachment} ->
         full_path_name =
           file_attachment
-          |> create_directory_for_file_attachment(course_id)
+          |> create_directory_for_file_attachment()
 
         File.rename!(uploaded_file.path, full_path_name)
         {:ok, file_attachment}
@@ -262,16 +273,22 @@ defmodule MediaHub.Courses do
     end
   end
 
-  defp create_directory_for_file_attachment(file_attachment, course_id) do
+  defp create_directory_for_file_attachment(file_attachment) do
+    file_attachment
+    |> build_path_from_file_attachment
+    |> Path.dirname()
+    |> File.mkdir_p!()
+
+    build_path_from_file_attachment(file_attachment)
+  end
+
+  defp build_path_from_file_attachment(file_attachment) do
     file_attachments_path = System.get_env("FILE_ATTACHMENTS_PATH", "./priv/file_attachments")
-    partial_path = Path.join(file_attachments_path, course_id)
+
+    partial_path = Path.join(file_attachments_path, Integer.to_string(file_attachment.course_id))
 
     full_path_name =
       Path.join([partial_path, Integer.to_string(file_attachment.id), file_attachment.file])
-
-    full_path_name
-    |> Path.dirname()
-    |> File.mkdir_p!()
 
     full_path_name
   end
