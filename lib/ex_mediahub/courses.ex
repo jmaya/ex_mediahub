@@ -51,7 +51,10 @@ defmodule MediaHub.Courses do
       ** (Ecto.NoResultsError)
 
   """
-  def get_course!(id), do: Repo.get!(Course, id)
+  def get_course!(id) do
+    Repo.get!(Course, id)
+    |> Repo.preload(:file_attachments)
+  end
 
   @doc """
   Creates a course.

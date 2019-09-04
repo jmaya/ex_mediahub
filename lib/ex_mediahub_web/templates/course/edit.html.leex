@@ -3,4 +3,11 @@
 <%= render "form.html", Map.put(assigns, :action, Routes.course_path(@socket, :update, @course)) %>
 
 <form id="upload-widget" action="/api/courses/file-attachment-upload" class="dropzone"></form>
-<span><%= link "Back", to: Routes.course_path(@socket, :index) %></span>
+<span><%= live_link "Back", to: Routes.course_path(@socket, :index) %></span>
+
+
+<ul>
+    <%= for file_attachment <- @course.file_attachments do %>
+    <li><%= file_attachment.file %> <%= link "DELETE", to: "#", phx_click: "delete", phx_value: file_attachment.id %></li>
+    <% end %>
+</ul>

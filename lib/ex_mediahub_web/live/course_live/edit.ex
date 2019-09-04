@@ -37,4 +37,15 @@ defmodule MediaHubWeb.CourseLive.Edit do
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
+
+  def handle_event("delete", file_attachment_id, socket) do
+    {:ok, file_attachment} =
+      file_attachment_id
+      |> Courses.get_file_attachment!()
+      |> Courses.delete_file_attachment()
+
+    course = Courses.get_course!(file_attachment.course_id)
+
+    {:noreply, socket |> assign(course: course)}
+  end
 end
