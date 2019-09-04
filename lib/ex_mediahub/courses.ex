@@ -269,7 +269,9 @@ defmodule MediaHub.Courses do
     full_path_name =
       Path.join([partial_path, Integer.to_string(file_attachment.id), file_attachment.file])
 
-    File.mkdir_p!(Path.dirname(full_path_name))
+    full_path_name
+    |> Path.dirname()
+    |> File.mkdir_p!()
 
     full_path_name
   end
