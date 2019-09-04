@@ -20,6 +20,7 @@ defmodule MediaHub.Courses.FileAttachment do
     file_attachment
     |> cast(attrs, [:file, :sha_1_hash, :content_type, :file_basename, :position])
     |> validate_required([:file, :sha_1_hash, :content_type, :file_basename, :position])
+    |> unique_constraint(:sha_1_hash)
     |> put_assoc(:course, attrs.course)
   end
 end
