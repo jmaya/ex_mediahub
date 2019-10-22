@@ -22,13 +22,17 @@ defmodule MediaHubWeb.Router do
     get "/", CourseController, :index
 
     resources "/courses", CourseController
+    resources "/file_attachments", FileAttachmentController
     live "/live-courses", CourseLive.Index
     live "/live-courses/new", CourseLive.New
+    live "/live-courses/:course_id", CourseLive.Show
+    live "/live-courses/edit/:course_id", CourseLive.Edit
     live "/top", TopLive
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", MediaHubWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", MediaHubWeb do
+    pipe_through :api
+    post "/courses/file-attachment-upload", CourseController, :file_attachment_upload
+  end
 end

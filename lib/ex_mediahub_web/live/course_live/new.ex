@@ -1,10 +1,10 @@
 defmodule MediaHubWeb.CourseLive.New do
   use Phoenix.LiveView
+  alias MediaHubWeb.Router.Helpers, as: Routes
+
   alias MediaHubWeb.CourseView
   alias MediaHub.Courses
   alias MediaHub.Courses.Course
-
-  alias MediaHubWeb.Router.Helpers, as: Routes
 
   def mount(_session, socket) do
     {:ok,
@@ -25,11 +25,11 @@ defmodule MediaHubWeb.CourseLive.New do
 
   def handle_event("save", %{"course" => course_params}, socket) do
     case Courses.create_course(course_params) do
-      {:ok, _course} ->
+      {:ok, course} ->
         {:stop,
          socket
          #  |> put_flash(:info, "Course created")
-         |> redirect(to: Routes.live_path(socket, MediaHubWeb.CourseLive.Index))}
+         |> redirect(to: Routes.live_path(socket, MediaHubWeb.CourseLive.Edit, course.id))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

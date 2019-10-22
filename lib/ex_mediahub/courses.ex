@@ -51,7 +51,10 @@ defmodule MediaHub.Courses do
       ** (Ecto.NoResultsError)
 
   """
-  def get_course!(id), do: Repo.get!(Course, id)
+  def get_course!(id) do
+    Repo.get!(Course, id)
+    |> Repo.preload(:file_attachments)
+  end
 
   @doc """
   Creates a course.
@@ -137,7 +140,172 @@ defmodule MediaHub.Courses do
   """
 
   def list_courses(number_of_courses) do
-    query = from c in Course, order_by: c.inserted_at, limit: ^number_of_courses
+    query = from c in Course, order_by: c.created_at, limit: ^number_of_courses
     query |> Repo.all()
+  end
+
+  alias MediaHub.Courses.FileAttachment
+
+  @doc """
+  Returns the list of file_attachments.
+
+  ## Examples
+
+      iex> list_file_attachments()
+      [%FileAttachment{}, ...]
+
+  """
+  def list_file_attachments do
+    Repo.all(FileAttachment)
+  end
+
+  @doc """
+  Gets a single file_attachment.
+
+  Raises `Ecto.NoResultsError` if the File attachment does not exist.
+
+  ## Examples
+
+      iex> get_file_attachment!(123)
+      %FileAttachment{}
+
+      iex> get_file_attachment!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_file_attachment!(id), do: Repo.get!(FileAttachment, id)
+
+  @doc """
+  Creates a file_attachment.
+
+  ## Examples
+
+      iex> create_file_attachment(%{field: value})
+      {:ok, %FileAttachment{}}
+
+      iex> create_file_attachment(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_file_attachment(attrs \\ %{}) do
+    %FileAttachment{}
+    |> FileAttachment.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a file_attachment.
+
+  ## Examples
+
+      iex> update_file_attachment(file_attachment, %{field: new_value})
+      {:ok, %FileAttachment{}}
+
+      iex> update_file_attachment(file_attachment, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_file_attachment(%FileAttachment{} = file_attachment, attrs) do
+    file_attachment
+    |> FileAttachment.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a FileAttachment.
+
+  ## Examples
+
+      iex> delete_file_attachment(file_attachment)
+      {:ok, %FileAttachment{}}
+
+      iex> delete_file_attachment(file_attachment)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_file_attachment(%FileAttachment{} = file_attachment) do
+    case Repo.delete(file_attachment) do
+      {:ok, fa} -> fa |> remove_file_attachment_from_disk
+      _ -> {:error, "Something went wrong removing the file"}
+    end
+  end
+
+  defp remove_file_attachment_from_disk(file_attachment) do
+    file_attachment
+    |> build_path_from_file_attachment
+    |> File.rm!()
+
+    {:ok, file_attachment}
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking file_attachment changes.
+
+  ## Examples
+
+      iex> change_file_attachment(file_attachment)
+      %Ecto.Changeset{source: %FileAttachment{}}
+
+  """
+  def change_file_attachment(%FileAttachment{} = file_attachment) do
+    FileAttachment.changeset(file_attachment, %{})
+  end
+
+  def create_file_attachment_from_uploaded_file(%{
+        course_id: course_id,
+        uploaded_file: uploaded_file
+      }) do
+    case create_file_attachment(%{
+           file_basename: uploaded_file.filename,
+           content_type: uploaded_file.content_type,
+           file: uploaded_file.filename,
+           course: get_course!(course_id),
+           position: 0,
+           sha_1_hash: hash_file(uploaded_file.path)
+         }) do
+      {:ok, file_attachment} ->
+        full_path_name =
+          file_attachment
+          |> create_directory_for_file_attachment()
+
+        File.rename!(uploaded_file.path, full_path_name)
+        {:ok, file_attachment}
+
+      {:error, changeset} ->
+        changeset
+    end
+  end
+
+  defp create_directory_for_file_attachment(file_attachment) do
+    file_attachment
+    |> build_path_from_file_attachment
+    |> Path.dirname()
+    |> File.mkdir_p!()
+
+    build_path_from_file_attachment(file_attachment)
+  end
+
+  defp build_path_from_file_attachment(file_attachment) do
+    file_attachments_path = System.get_env("FILE_ATTACHMENTS_PATH", "./priv/file_attachments")
+
+    partial_path = Path.join(file_attachments_path, Integer.to_string(file_attachment.course_id))
+
+    full_path_name =
+      Path.join([partial_path, Integer.to_string(file_attachment.id), file_attachment.file])
+
+    full_path_name
+  end
+
+  defp hash_file(file_path, algo \\ :sha256) do
+    hash_ref = :crypto.hash_init(algo)
+
+    File.stream!(file_path)
+    |> Enum.reduce(hash_ref, fn chunk, prev_ref ->
+      new_ref = :crypto.hash_update(prev_ref, chunk)
+      new_ref
+    end)
+    |> :crypto.hash_final()
+    |> Base.encode16()
+    |> String.downcase()
   end
 end
